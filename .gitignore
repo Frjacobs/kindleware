@@ -1,0 +1,38 @@
+# macOS and Windows system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor settings
+.vscode/
+*.code-workspace
+*.swp
+
+# Node/Tailwind/PostCSS, build tools
+node_modules/
+dist/
+build/
+.cache/
+.sass-cache/
+
+# Shopify CLI & Theme Kit
+.shopify/
+*.env
+*.toml
+config.yml
+
+# Logs and backups
+*.log
+.env.*
+*.bak
+
+# Development files
+dev-tools/
+
+# Archive exports
+*.zip
+*.tar
