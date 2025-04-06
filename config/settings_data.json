@@ -12,7 +12,7 @@
     "logo_width": 90,
     "type_header_font": "itc_cheltenham_n4",
     "heading_scale": 100,
-    "type_body_font": "assistant_n4",
+    "type_body_font": "helvetica_n4",
     "body_scale": 100,
     "page_width": 1200,
     "spacing_sections": 0,
@@ -155,12 +155,12 @@
       },
       "scheme-2": {
         "settings": {
-          "background": "#f3f3f3",
+          "background": "#35312e",
           "background_gradient": "",
-          "text": "#121212",
-          "button": "#121212",
-          "button_label": "#f3f3f3",
-          "secondary_button_label": "#121212",
+          "text": "#ffffff",
+          "button": "#af5a3c",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#ffffff",
           "shadow": "#121212"
         }
       },
