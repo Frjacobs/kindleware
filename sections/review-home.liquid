@@ -1,0 +1,426 @@
+{% comment %}
+  Review Home Section
+  
+  A responsive review section with a 30/70 split on desktop and stacked on mobile.
+  Features a header with star icon and heading, and a carousel of review cards.
+  Each card contains product image, name, review text, and an embedded video.
+{% endcomment %}
+
+<section class="review-section">
+  <div class="review-container">
+    <div class="review-header">
+      <div class="review-badge">
+        <div class="stars">
+          {% for i in (1..5) %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+            </svg>
+          {% endfor %}
+        </div>
+      </div>
+      
+      {% if section.settings.heading != blank %}
+        <h2 class="review-heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subtext != blank %}
+        <div class="review-subtext">{{ section.settings.subtext }}</div>
+      {% endif %}
+    </div>
+    
+    <div class="review-carousel">
+      <div class="review-carousel-inner">
+        {% for block in section.blocks %}
+          <div class="review-card" {{ block.shopify_attributes }}>
+            <div class="review-card-content">
+              {% if block.settings.product_image != blank %}
+                <div class="review-product-image">
+                  {{ block.settings.product_image | image_url: width: 150 | image_tag:
+                    loading: 'lazy',
+                    width: 150,
+                    height: 150,
+                    alt: block.settings.product_name | escape
+                  }}
+                </div>
+              {% endif %}
+              
+              <div class="review-product-info">
+                {% if block.settings.product_name != blank %}
+                  <h3 class="review-product-title">{{ block.settings.product_name }}</h3>
+                {% endif %}
+                
+                {% if block.settings.badge_label != blank %}
+                  <span class="review-product-badge">{{ block.settings.badge_label }}</span>
+                {% endif %}
+              </div>
+              
+              {% if block.settings.review_text != blank %}
+                <div class="review-text">
+                  <p>{{ block.settings.review_text }}</p>
+                </div>
+              {% endif %}
+              
+              {% if block.settings.video_url != blank %}
+                <div class="review-video-container">
+                  {% if block.settings.video_url contains "youtube.com" or block.settings.video_url contains "youtu.be" %}
+                    <iframe 
+                      src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}" 
+                      frameborder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                      allowfullscreen 
+                      loading="lazy"
+                      title="Product Review Video"
+                    ></iframe>
+                  {% elsif block.settings.video_url contains "vimeo.com" %}
+                    <iframe 
+                      src="{{ block.settings.video_url | replace: 'vimeo.com/', 'player.vimeo.com/video/' }}" 
+                      frameborder="0" 
+                      allow="autoplay; fullscreen; picture-in-picture" 
+                      allowfullscreen 
+                      loading="lazy"
+                      title="Product Review Video"
+                    ></iframe>
+                  {% elsif block.settings.video %}
+                    {{ block.settings.video | video_tag: controls: true, preload: "none", class: "review-video" }}
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="review-navigation">
+        <button class="review-prev" aria-label="Previous">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="review-next" aria-label="Next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .review-section {
+    padding: 4rem 1.5rem;
+    overflow: hidden;
+  }
+
+  .review-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .review-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .review-badge {
+    margin-bottom: 0.5rem;
+  }
+
+  .stars {
+    display: flex;
+    color: #AF5A3C;
+    gap: 2px;
+  }
+
+  .review-heading {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .review-subtext {
+    font-size: 1rem;
+    line-height: 1.5;
+    opacity: 0.8;
+  }
+
+  .review-carousel {
+    position: relative;
+    width: 100%;
+  }
+
+  .review-carousel-inner {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    padding: 1rem 0;
+  }
+
+  .review-carousel-inner::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .review-card {
+    flex: 0 0 calc(100% - 2rem);
+    scroll-snap-align: start;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    background: white;
+  }
+
+  .review-card-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+    height: 100%;
+  }
+
+  .review-product-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .review-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .review-product-title {
+    font-size: 1.125rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .review-product-badge {
+    display: inline-block;
+    background-color: #AF5A3C;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .review-text {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .review-text p {
+    margin: 0;
+  }
+
+  .review-video-container {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+
+  .review-video-container iframe,
+  .review-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .review-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .review-prev,
+  .review-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .review-prev:hover,
+  .review-next:hover {
+    background: #f5f5f5;
+  }
+
+  /* Desktop styles */
+  @media screen and (min-width: 750px) {
+    .review-container {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .review-header {
+      width: 30%;
+      padding-right: 2rem;
+    }
+
+    .review-carousel {
+      width: 70%;
+    }
+
+    .review-heading {
+      font-size: 2.5rem;
+    }
+
+    .review-card {
+      flex: 0 0 calc(50% - 1.5rem);
+    }
+
+    .review-card-content {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .review-product-info {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .review-text {
+      width: 100%;
+    }
+
+    .review-video-container {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .review-card {
+      flex: 0 0 calc(33.333% - 1.5rem);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('.review-carousel-inner');
+    const prevButton = document.querySelector('.review-prev');
+    const nextButton = document.querySelector('.review-next');
+    const cards = document.querySelectorAll('.review-card');
+    
+    if (!carousel || !prevButton || !nextButton || cards.length === 0) return;
+    
+    const cardWidth = cards[0].offsetWidth + 24; // Width + gap
+    
+    prevButton.addEventListener('click', () => {
+      carousel.scrollBy({
+        left: -cardWidth,
+        behavior: 'smooth'
+      });
+    });
+    
+    nextButton.addEventListener('click', () => {
+      carousel.scrollBy({
+        left: cardWidth,
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Review Home",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Over 80,000 5-star reviews"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "See what our customers are saying about our products"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Review Card",
+      "type": "review_card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "product_name",
+          "label": "Product Name",
+          "default": "Product Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product Image"
+        },
+        {
+          "type": "textarea",
+          "id": "review_text",
+          "label": "Review Text",
+          "default": "This product has been a game-changer for me. I highly recommend it!"
+        },
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Badge Label",
+          "default": "Bestseller"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Shopify Video"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Video URL",
+          "info": "YouTube or Vimeo URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Review Home",
+      "blocks": [
+        {
+          "type": "review_card"
+        },
+        {
+          "type": "review_card"
+        },
+        {
+          "type": "review_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
