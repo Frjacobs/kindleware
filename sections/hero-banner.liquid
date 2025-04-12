@@ -1,0 +1,275 @@
+{% comment %}
+  Hero Banner Section
+  
+  A responsive hero section designed for high conversions on both mobile and desktop.
+  Features headline, reviews, benefits, and CTA with configurable content through schema.
+{% endcomment %}
+
+<section class="hero-banner">
+  <div class="hero-container">
+    {% if section.settings.image != blank %}
+      <div class="hero-image">
+        {% if section.settings.image %}
+          {{ section.settings.image | image_url: width: 1500 | image_tag: 
+            loading: 'eager',
+            sizes: '(min-width: 750px) 1500px, 100vw',
+            alt: section.settings.heading | escape
+          }}
+        {% else %}
+          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="hero-content">
+      {% if section.settings.review_text != blank %}
+        <div class="hero-reviews">
+          <div class="stars">
+            {% for i in (1..5) %}
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+              </svg>
+            {% endfor %}
+          </div>
+          <span>{{ section.settings.review_text }}</span>
+        </div>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="hero-heading">{{ section.settings.heading }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subtext != blank %}
+        <p class="hero-subtext">{{ section.settings.subtext }}</p>
+      {% endif %}
+      
+      <ul class="hero-benefits">
+        {% if section.settings.benefit_1 != blank %}
+          <li>
+            <span class="benefit-icon">✓</span>
+            <span>{{ section.settings.benefit_1 }}</span>
+          </li>
+        {% endif %}
+        
+        {% if section.settings.benefit_2 != blank %}
+          <li>
+            <span class="benefit-icon">✓</span>
+            <span>{{ section.settings.benefit_2 }}</span>
+          </li>
+        {% endif %}
+        
+        {% if section.settings.benefit_3 != blank %}
+          <li>
+            <span class="benefit-icon">✓</span>
+            <span>{{ section.settings.benefit_3 }}</span>
+          </li>
+        {% endif %}
+      </ul>
+      
+      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+        <div class="hero-cta-wrapper">
+          <a href="{{ section.settings.cta_link }}" class="hero-cta">
+            {{ section.settings.cta_label }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column-reverse;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .hero-image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .hero-content {
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-heading {
+    font-size: 2rem;
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .hero-subtext {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .hero-reviews {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .stars {
+    display: flex;
+    color: #FFD700;
+  }
+
+  .hero-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .hero-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .benefit-icon {
+    color: #4CAF50;
+    font-weight: bold;
+  }
+
+  .hero-cta-wrapper {
+    margin-top: 1rem;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background-color: #000000;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .hero-cta:hover {
+    background-color: #333333;
+    transform: translateY(-2px);
+  }
+
+  /* Desktop styles */
+  @media screen and (min-width: 750px) {
+    .hero-container {
+      flex-direction: row;
+      min-height: 500px;
+    }
+
+    .hero-content {
+      width: 50%;
+      padding: 4rem;
+      justify-content: center;
+    }
+
+    .hero-image {
+      width: 50%;
+      height: auto;
+    }
+
+    .hero-heading {
+      font-size: 2.5rem;
+    }
+
+    .hero-subtext {
+      font-size: 1.125rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Elevate Your Experience"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Discover why customers love our products"
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review Text",
+      "default": "Trusted by 4,000+ customers"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1",
+      "label": "Benefit 1",
+      "default": "Premium Quality Materials"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2",
+      "label": "Benefit 2",
+      "default": "Sustainable Manufacturing"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3",
+      "label": "Benefit 3",
+      "default": "Free Shipping Worldwide"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Hero Sections"
+    }
+  ]
+}
+{% endschema %}
