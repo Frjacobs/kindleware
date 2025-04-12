@@ -36,6 +36,3 @@ dev-tools/
 # Archive exports
 *.zip
 *.tar
-
-#preview custom sections
-preview.liquid
