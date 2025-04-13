@@ -7,31 +7,27 @@
 
 <section class="hero-banner">
   <div class="hero-container">
-    {% if section.settings.image != blank %}
+    {% if section.settings.hero_image != blank %}
       <div class="hero-image">
-        {% if section.settings.image %}
-          {{ section.settings.image | image_url: width: 1500 | image_tag: 
-            loading: 'eager',
-            sizes: '(min-width: 750px) 1500px, 100vw',
-            alt: section.settings.heading | escape
-          }}
-        {% else %}
-          {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-        {% endif %}
+        {{ section.settings.hero_image | image_url: width: 1500 | image_tag: 
+          loading: 'eager',
+          sizes: '(min-width: 750px) 1500px, 100vw',
+          alt: section.settings.heading | escape
+        }}
+      </div>
+    {% else %}
+      <div class="hero-image" style="background-color: #e0e0e0; width: 100%; height: 300px; display: flex; align-items: center; justify-content: center;">
+        <span style="color: #757575;">Placeholder Image</span>
       </div>
     {% endif %}
-    
+
     <div class="hero-content">
-      {% if section.settings.review_text != blank %}
-        <div class="hero-reviews">
-          <div class="stars">
-            {% for i in (1..5) %}
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
-              </svg>
-            {% endfor %}
-          </div>
-          <span>{{ section.settings.review_text }}</span>
+      {% if section.settings.trusted_by_text != blank %}
+        <div class="trusted-text">
+          <span style="color: {{ section.settings.trusted_icon_color }};">
+            ★
+          </span>
+          {{ section.settings.trusted_by_text }}
         </div>
       {% endif %}
 
@@ -39,37 +35,25 @@
         <h1 class="hero-heading">{{ section.settings.heading }}</h1>
       {% endif %}
       
-      {% if section.settings.subtext != blank %}
-        <p class="hero-subtext">{{ section.settings.subtext }}</p>
+      {% if section.settings.subheading != blank %}
+        <p class="hero-subtext">{{ section.settings.subheading }}</p>
       {% endif %}
       
       <ul class="hero-benefits">
-        {% if section.settings.benefit_1 != blank %}
+        {% assign benefits = section.settings.benefit_bullets | split: '\n' %}
+        {% for benefit in benefits %}
           <li>
             <span class="benefit-icon">✓</span>
-            <span>{{ section.settings.benefit_1 }}</span>
+            <span>{{ benefit }}</span>
           </li>
-        {% endif %}
-        
-        {% if section.settings.benefit_2 != blank %}
-          <li>
-            <span class="benefit-icon">✓</span>
-            <span>{{ section.settings.benefit_2 }}</span>
-          </li>
-        {% endif %}
-        
-        {% if section.settings.benefit_3 != blank %}
-          <li>
-            <span class="benefit-icon">✓</span>
-            <span>{{ section.settings.benefit_3 }}</span>
-          </li>
-        {% endif %}
+        {% endfor %}
       </ul>
       
-      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+      {% assign cta_text = section.settings.cta_text | default: 'Shop Now' %}
+      {% if section.settings.cta_link != blank %}
         <div class="hero-cta-wrapper">
-          <a href="{{ section.settings.cta_link }}" class="hero-cta">
-            {{ section.settings.cta_label }}
+          <a href="{{ section.settings.cta_link }}" class="hero-cta" style="background-color: {{ section.settings.button_bg_color | default: '#AF5A3C' }}; color: {{ section.settings.button_text_color | default: '#ffffff' }};">
+            {{ cta_text }}
           </a>
         </div>
       {% endif %}
@@ -87,9 +71,15 @@
 
   .hero-container {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     max-width: 1440px;
     margin: 0 auto;
+  }
+
+  .trusted-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: {{ section.settings.text_alignment }};
   }
 
   .hero-image {
@@ -99,17 +89,12 @@
     justify-content: center;
   }
 
-  .hero-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-
   .hero-content {
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    text-align: {{ section.settings.text_alignment }};
   }
 
   .hero-heading {
@@ -123,18 +108,6 @@
     font-size: 1rem;
     line-height: 1.5;
     margin: 0;
-  }
-
-  .hero-reviews {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-  }
-
-  .stars {
-    display: flex;
-    color: #FFD700;
   }
 
   .hero-benefits {
@@ -163,8 +136,6 @@
 
   .hero-cta {
     display: inline-block;
-    background-color: #000000;
-    color: #ffffff;
     text-decoration: none;
     padding: 0.75rem 1.5rem;
     border-radius: 4px;
@@ -174,7 +145,6 @@
   }
 
   .hero-cta:hover {
-    background-color: #333333;
     transform: translateY(-2px);
   }
 
@@ -219,39 +189,33 @@
       "default": "Elevate Your Experience"
     },
     {
-      "type": "textarea",
-      "id": "subtext",
-      "label": "Subtext",
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
       "default": "Discover why customers love our products"
     },
     {
       "type": "text",
-      "id": "review_text",
-      "label": "Review Text",
-      "default": "Trusted by 4,000+ customers"
+      "id": "trusted_by_text",
+      "label": "Trusted By Text",
+      "default": "Trusted by over 4,000 customers"
+    },
+    {
+      "type": "color",
+      "id": "trusted_icon_color",
+      "label": "Trusted Icon Color",
+      "default": "#FFD700"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_bullets",
+      "label": "Benefit Bullets",
+      "default": "Premium Quality Materials\nSustainable Manufacturing\nFree Shipping Worldwide"
     },
     {
       "type": "text",
-      "id": "benefit_1",
-      "label": "Benefit 1",
-      "default": "Premium Quality Materials"
-    },
-    {
-      "type": "text",
-      "id": "benefit_2",
-      "label": "Benefit 2",
-      "default": "Sustainable Manufacturing"
-    },
-    {
-      "type": "text",
-      "id": "benefit_3",
-      "label": "Benefit 3",
-      "default": "Free Shipping Worldwide"
-    },
-    {
-      "type": "text",
-      "id": "cta_label",
-      "label": "CTA Button Label",
+      "id": "cta_text",
+      "label": "CTA Button Text",
       "default": "Shop Now"
     },
     {
@@ -260,9 +224,32 @@
       "label": "CTA Button Link"
     },
     {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button Background Color",
+      "default": "#AF5A3C"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button Text Color",
+      "default": "#ffffff"
+    },
+    {
       "type": "image_picker",
-      "id": "image",
+      "id": "hero_image",
       "label": "Hero Image"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
     }
   ],
   "presets": [
