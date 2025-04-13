@@ -138,6 +138,42 @@
         "settings": {
           "color_scheme": "scheme-1"
         }
+      },
+      "hero-banner": {
+        "type": "hero-banner",
+        "settings": {
+          "heading": "Elevate Your Experience",
+          "subtext": "Discover why customers love our products",
+          "review_text": "Trusted by 4,000+ customers",
+          "benefit_1": "Premium Quality Materials",
+          "benefit_2": "Sustainable Manufacturing",
+          "benefit_3": "Free Shipping Worldwide",
+          "cta_label": "Shop Now",
+          "cta_link": "",
+          "image": "shopify://shop_images/TitaniumCookware_Gold_Chrome_4_d192c5ed-45ec-476e-ac10-a61717ddc5af.webp"
+        }
+      },
+      "announcement-marquee": {
+        "type": "announcement-marquee",
+        "settings": {
+          "scroll_direction": "normal",
+          "animation_duration": 30,
+          "padding_y": 20,
+          "text_size": 20,
+          "mobile_text_size": 17,
+          "font_weight": "700",
+          "text_transform": "uppercase",
+          "letter_spacing": 0.5,
+          "background_color": "#35312e",
+          "text_color": "#ffffff"
+        }
+      },
+      "review-home": {
+        "type": "review-home",
+        "settings": {
+          "heading": "Over 80,000 5-star reviews",
+          "subtext": "See what our customers are saying about our products"
+        }
       }
     },
     "content_for_index": [],
